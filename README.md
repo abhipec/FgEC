@@ -1,2 +1,5 @@
 # FgEC-generalization
-generalization ability of FgEC models
+
+## Objective
+To study generalization ability of FgEC models.
+
