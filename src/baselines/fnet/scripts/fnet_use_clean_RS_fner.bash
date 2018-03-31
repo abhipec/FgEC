@@ -15,12 +15,12 @@ joint_embedding_size=500
 epochs=6
 save_checkpoint_after=500000
 
+# http://nlp.stanford.edu/data/glove.42B.300d.zip
 glove_vector_file_path=/hdd/word_vectors/glove.42B.300d/glove.42B.300d.txt
 
 
 #echo "Generate local variables required for model"
 #python baselines/fnet/src/data_processing/json_to_tfrecord.py prepare_local_variables ../data/datasets/$dataset_name/fner_train.json  $glove_vector_file_path unk $data_directory/ --lowercase
-
 
 #echo "Converting Train data to TFRecord"
 #python baselines/fnet/src/data_processing/json_to_tfrecord.py afet_data $data_directory/ ../data/datasets/$dataset_name/fner_train.json
@@ -47,11 +47,11 @@ for ((i=1; i<=1; i++)); do
 
   echo "Report results FNER dev data"
   bash scripts/report_result_fnet.bash $ckpt_directory/$model_ckpt_name/fner_dev.json_0.tfrecord/ ../data/datasets/fner_dev.json 0 > $ckpt_directory/$model_ckpt_name/fner_dev.json_0.tfrecord/final_result.txt
-  bash scripts/report_result_fnet.bash $ckpt_directory/$model_ckpt_name/fner_dev_lstm_crf.json_0.tfrecord/ ../data/datasets/fner_dev.json 0 > $ckpt_directory/$model_ckpt_name/fner_dev_lstm_crf.json_0.tfrecord/final_result.txt
+#  bash scripts/report_result_fnet.bash $ckpt_directory/$model_ckpt_name/fner_dev_lstm_crf.json_0.tfrecord/ ../data/datasets/fner_dev.json 0 > $ckpt_directory/$model_ckpt_name/fner_dev_lstm_crf.json_0.tfrecord/final_result.txt
 
   echo "Report results FNER eval data"
   bash scripts/report_result_fnet.bash $ckpt_directory/$model_ckpt_name/fner_eval.json_0.tfrecord/ ../data/datasets/fner_eval.json 0 > $ckpt_directory/$model_ckpt_name/fner_eval.json_0.tfrecord/final_result.txt
-  bash scripts/report_result_fnet.bash $ckpt_directory/$model_ckpt_name/fner_eval_lstm_crf.json_0.tfrecord/ ../data/datasets/fner_eval.json 0 > $ckpt_directory/$model_ckpt_name/fner_eval_lstm_crf.json_0.tfrecord/final_result.txt
+#  bash scripts/report_result_fnet.bash $ckpt_directory/$model_ckpt_name/fner_eval_lstm_crf.json_0.tfrecord/ ../data/datasets/fner_eval.json 0 > $ckpt_directory/$model_ckpt_name/fner_eval_lstm_crf.json_0.tfrecord/final_result.txt
 
 done
 
