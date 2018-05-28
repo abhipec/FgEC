@@ -1,6 +1,4 @@
-# FgEC-generalization
+# FgEC
 
-## Objective
-To study generalization ability of FgEC models.
-
- https://share.cse.iitg.ernet.in/download.php?f=kP8YRERoDe
+Updated version of abhipec/fnet code, compatible with TF 1.4
+Transfer learning part of abhipec/fnet is not included in this code.
