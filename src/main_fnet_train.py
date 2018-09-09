@@ -117,5 +117,4 @@ if __name__ == '__main__':
     finally:
         # When done, ask the threads to stop.
         coord.request_stop()
-        coord.join(threads)
     sess.close()

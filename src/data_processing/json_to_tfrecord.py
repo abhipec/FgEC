@@ -31,7 +31,6 @@ import numpy as np
 import tensorflow as tf
 from joblib import Parallel, delayed
 sys.path.insert(0, 'utils')
-from format_conversion_helper import remove_overlapping_ems
 
 def chunks(sentences, number_of_sentences):
     """
@@ -185,8 +184,7 @@ def process_sentences(l_vars, arguments, sentences, random_id):
                 new_token = re.sub("\d", "X", new_token)
             new_tokens.append(new_token)
 
-        filtered_ems = remove_overlapping_ems(json_data['mentions'])
-        for mention in filtered_ems:
+        for mention in json_data['mentions']:
             start = mention['start']
             end = mention['end']
 

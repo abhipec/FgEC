@@ -10,7 +10,7 @@ f1_score=()
 for entry in `ls $1 | sort -g | egrep -v '.txt'`
 do 
   echo $entry
-  result=$(python baselines/fnet/src/report_result_fnet.py $2 ${1}$entry $3 $4)
+  result=$(python report_result_fnet.py $2 ${1}$entry $3 $4)
   echo "$result"
   readarray -t y <<<"$result"
   # first element of array contains overall result.

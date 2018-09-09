@@ -60,7 +60,7 @@ if __name__ == '__main__':
         config_ckpt_mapping[prefix].append(ckpt_name)
 
 
-    datasets_to_process = ['fner_dev.json_0.tfrecord', 'fner_eval.json_0.tfrecord']
+    datasets_to_process = ['dev.json_0.tfrecord', 'test.json_0.tfrecord']
 
     # Development evaluation mapping.
     dev_eval_map = {
