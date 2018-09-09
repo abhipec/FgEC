@@ -29,17 +29,20 @@ Please use the following BibTex code for citing this work.
 ### Install dependencies
 Python version: 3.6
 ```
-pip install 
+pip install tensorflow-gpu scipy docopt joblib
 ```
 
 ### Download the glove word embeddings
 Download the glove word embedding: http://nlp.stanford.edu/data/glove.840B.300d.zip
 and store the file at location FgEC/data/glove.840B.300d.txt
 
-### Training
-A sample file to train on OntoNotes dataset is available at 
-q
-```
+### Compile the cpp files
 
-```
+cd FgEC/lib/
+bash compile_gcc_5.bash
+
+### Training
+A sample file to train on OntoNotes dataset is available at FgEC/src/scripts/ontonotes.bash 
+
+Please refer that file for further instructions to run the code.
 
