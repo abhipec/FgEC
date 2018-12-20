@@ -1,6 +1,8 @@
-TF_INC=$(python3 -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
-TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
+# Tested on g++ version 7.3.0, TensorFlow version 1.12
+TF_CFLAGS=( $(python -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_compile_flags()))') )
+TF_LFLAGS=( $(python -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_link_flags()))') )
 for i in *.cc; do
   echo $i
-  g++ -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -shared $i -o ${i::-2}so -fPIC -I $TF_INC -L$TF_LIB -ltensorflow_framework
+  g++ -std=c++11 -shared $i -o ${i::-2}so -fPIC ${TF_CFLAGS[@]} ${TF_LFLAGS[@]} -O2
 done
+
