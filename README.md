@@ -1,7 +1,6 @@
 # FgEC
 
-Updated version of abhipec/fnet code, compatible with TensorFlow 1.10
-Transfer learning part of abhipec/fnet is not included in this code.
+Updated version of abhipec/fnet code, compatible with TensorFlow 1.12. Feature level transfer learning code of [abhipec/fnet](http://github.com/abhipec/fnet/) is not included in this repo. There is a major difference between this code base and [abhipec/fnet](http://github.com/abhipec/fnet/). For exact replication of the paper results please refer to [abhipec/fnet](http://github.com/abhipec/fnet/) which also includes pre-processed datasets for most of the experimental results reported in the paper.
 
 
 ## Publication
@@ -43,6 +42,11 @@ bash compile_gcc_5.bash
 
 ### Training
 A sample file to train on OntoNotes dataset is available at FgEC/src/scripts/ontonotes.bash 
+
+Please refer that file for further instructions to run the code.
+
+### Model level transfer learning
+A sample file to train using the pre-trained model weights obtained from a different dataset is available at FgEC/src/scripts/TL_OntoNotes_on_BBN.bash
 
 Please refer that file for further instructions to run the code.
 
