@@ -2,7 +2,8 @@
 Convert json data shared by Ren et al. to TFRecord format for entity mention classification task.
 Usage:
     json_to_tfrecord prepare_local_variables <input_file_path> <word_vector_file> <unk_token>
-                     <output_directory> [--normalize_digits] [--lowercase]
+                     <output_directory> [--normalize_digits] [--lowercase] [--transfer_learning]
+                     [--tl_local_variables=<file_path>]
     json_to_tfrecord afet_data <output_directory> <input_file_path> [--test_data]
     json_to_tfrecord (-h | --help)
 
@@ -18,6 +19,10 @@ Options:
     --test_data                             If present, sentences with more than 100 words
                                             will not be removed. This is required if testing data
                                             has longer sentences.
+    --transfer_learning                     If true, set the tl_local_variables parameter to specify
+                                            the source of transfer learning.
+    --tl_local_variables=<file_path>        The file path of the source data local variables.
+
 """
 import sys
 import os
@@ -259,6 +264,16 @@ def prepare_or_load_variables(arguments):
     if os.path.isfile(output_directory + 'local_variables.pickle'):
         print('Using pre saved local variables.')
         l_vars, arguments = pickle.load(open(output_directory + 'local_variables.pickle', 'rb'))
+    elif arguments['--transfer_learning']:
+        # All local variables will be same as that of the specified file path except the
+        # label to number dictionary.
+        l_vars, _ = pickle.load(open(arguments['--tl_local_variables'], 'rb'))
+        label_to_num = generate_labels_to_numbers(arguments['<input_file_path>'])
+        l_vars['ltn'] = label_to_num
+        # writing local variables and the arguments used
+        arguments.pop('prepare_local_variables', None)
+        pickle.dump((l_vars, arguments),
+                    open(arguments['<output_directory>'] + 'local_variables.pickle', 'wb'))
     else:
         # load dbpedia label mappings
         print('Generating unique words and characters.')

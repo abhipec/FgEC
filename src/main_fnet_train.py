@@ -5,7 +5,8 @@ Usage:
                     <keep_prob> <learning_rate> <batch_size> <char_embedding_dim>
                     <char_rnn_hidden_neurons> <joint_embedding_size> <additional_epochs>
                     <save_ckpt_after_sentences> [--use_clean] [--use_mention]
-                    [--retrain_word_embeddings]
+                    [--retrain_word_embeddings]  [--transfer_learning] [--tl_ckpt_directory=<dir>]
+                    [--tl_model_number=<number>]
     main_fnet_train (-h | --help)
 
 Options:
@@ -24,6 +25,10 @@ Options:
     --use_clean
     --use_mention
     --retrain_word_embeddings
+    --transfer_learning             If transfer learning, then load a limited set of
+                                    variables.
+    --tl_ckpt_directory=<dir>       Directory to load ckeckpoint for transfer learning.
+    --tl_model_number=<number>      The model to be loaded from the checkpoint directory.
 
 """
 import os
@@ -53,6 +58,35 @@ def load_checkpoint(checkpoint_directory,
         step = int(model_checkpoint_path.rsplit('-', 1)[1])
         print('Model loaded = ', step)
     return saver_ob, step
+
+def load_checkpoint_tl(checkpoint_directory,
+                       number,
+                       session):
+    """
+    Load checkpoint for transfer learning if exists.
+    """
+    variables_to_keep = []
+    # Label embedding will not be restored.
+    for variable in tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES):
+        if variable.name == 'embeddings/label_embedding:0':
+            continue
+        variables_to_keep.append(variable)
+
+    saver_ob = tf.train.Saver(variables_to_keep, max_to_keep=0)
+    # verify if we don't have a checkpoint saved directly
+    step = 0
+    ckpt = tf.train.get_checkpoint_state(checkpoint_directory)
+    if ckpt and ckpt.model_checkpoint_path:
+        # Restores from checkpoint
+        model_checkpoint_path = ckpt.model_checkpoint_path
+        new_path = model_checkpoint_path[:model_checkpoint_path.find('-')] + '-' + str(number)
+        saver_ob.restore(session, new_path)
+        step = int(new_path.rsplit('-', 1)[1])
+        print('Model loaded = ', step)
+    return saver_ob, step
+
+
+
 
 #pylint: disable=invalid-name
 if __name__ == '__main__':
@@ -92,6 +126,14 @@ if __name__ == '__main__':
     # Create a saver and session object.
     saver, sentences_elapsed = load_checkpoint(ckpt_directory,
                                                sess)
+    if sentences_elapsed == 0 and arguments['--transfer_learning']:
+        saver_tl, sentences_elapsed_tl = load_checkpoint_tl(
+            arguments['--tl_ckpt_directory'],
+            arguments['--tl_model_number'],
+            sess)
+        if sentences_elapsed_tl == 0:
+            print('No knowledge available to transfer')
+
     batches_elapsed = int(sentences_elapsed / bs)
 
     # dump parameters used to disk
